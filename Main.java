@@ -28,6 +28,7 @@ public class Main {
             */
             
             //g.execute("CREATE TABLE product (id INT4, lot INT4, nom VARCHAR, description VARCHAR, categorie VARCHAR, prix FLOAT8)");
+            g.execute("DELETE FROM product");
             Produit p = new Produit(1, 100, "Laptop", "Ordinateur portable", "Electronique", 899.99);
             g.insert(p, "product");
             g.displayTable("product");
@@ -39,6 +40,8 @@ public class Main {
             g.insert(p2, "product"); // Même id → mise à jour
 
             g.displayTable("product");
+            
+            
             
         } catch (SQLException e) {
             e.printStackTrace();
