@@ -11,8 +11,8 @@ public class Connexion {
             String url = "jdbc:postgresql://pedago.univ-avignon.fr:5432/etd";
 
             Properties props = new Properties();
-            props.setProperty("user", "uapv2501850");    // mettre votre uapv
-            props.setProperty("password", "MsM7du");  // mettre votre mdp personnel 
+            props.setProperty("user", "uapv*****");    // mettre votre uapv
+            props.setProperty("password", "mdp");  // mettre votre mdp personnel 
 
             Class.forName("org.postgresql.Driver");
             connection = DriverManager.getConnection(url, props);
@@ -23,3 +23,4 @@ public class Connexion {
         return connection;
     }
 }
+
