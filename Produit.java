@@ -1,0 +1,159 @@
+package tpjdbc;
+
+import data.*;
+import java.util.HashMap;
+
+
+import data.IData;
+import data.fieldType;
+
+@SuppressWarnings("unused")	
+public class Produit implements IData{
+	private int id;
+	private int lot;
+	private String nom;
+	private String description;
+	private String categorie;
+	private double prix;
+	private HashMap<String, fieldType> map;
+	private String values;
+	
+	
+	public static void main(String[] args) {
+	    Produit p = new Produit(3, 100, "AE43", "produit non dommagé", "dangereux", 30.0);
+	    System.out.println(p.getMap());
+	    System.out.println(p.getValues());
+	    
+	    HashMap<String, fieldType> fakeTable = new HashMap<>();
+	    fakeTable.put("id", fieldType.INT4);
+	    fakeTable.put("nom", fieldType.VARCHAR);
+
+	    System.out.println(p.check(fakeTable)); // false (il manque des colonnes)
+	}
+
+	public Produit(int id, int lot, String nom, String description, String categorie, double prix) {
+	    this.id = id;
+	    this.lot = lot;
+	    this.nom = nom;
+	    this.description = description;
+	    this.categorie = categorie;
+	    this.prix = prix;
+	    getStruct(); // Initialise map et values
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "Produit [id=" + id + ", lot=" + lot + ", nom=" + nom + ", Description=" + description + ", categorie="
+				+ categorie + ", prix=" + prix + "]";
+	}
+
+	@Override
+	public void getStruct() {
+	    map = new HashMap<>();
+	    map.put("id", fieldType.INT4);
+	    map.put("lot", fieldType.INT4);
+	    map.put("nom", fieldType.VARCHAR);
+	    map.put("description", fieldType.VARCHAR);
+	    map.put("categorie", fieldType.VARCHAR);
+	    map.put("prix", fieldType.FLOAT8);
+	    
+	    // Construire values dans l'ordre de map.keySet()
+	    StringBuilder sb = new StringBuilder();
+	    for (String key : map.keySet()) {
+	        if (sb.length() > 0) sb.append(", ");
+	        
+	        switch(key) {
+	            case "id": sb.append(id); break;
+	            case "lot": sb.append(lot); break;
+	            case "nom": sb.append("'" + nom + "'"); break;
+	            case "description": sb.append("'" + description + "'"); break;
+	            case "categorie": sb.append("'" + categorie + "'"); break;
+	            case "prix": sb.append(prix); break;
+	        }
+	    }
+	    values = sb.toString();
+	}
+	
+	@Override
+	public String getValues() {
+		return values;
+	}
+
+
+	@Override
+	public HashMap<String, fieldType> getMap() {
+		return map;
+	}
+
+
+	@Override
+	public boolean check(HashMap<String, fieldType> tableStruct) {
+	    if (tableStruct.size() != map.size()) {
+	        return false;
+	    }
+	    
+	    for (String key : map.keySet()) {
+	        if (!tableStruct.containsKey(key)) {
+	            return false;
+	        }
+	        if (tableStruct.get(key) != map.get(key)) {
+	            return false;
+	        }
+	    }
+	    
+	    return true;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getLot() {
+		return lot;
+	}
+
+	public void setLot(int lot) {
+		this.lot = lot;
+	}
+
+	public String getNom() {
+		return nom;
+	}
+
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getCategorie() {
+		return categorie;
+	}
+
+	public void setCategorie(String categorie) {
+		this.categorie = categorie;
+	}
+
+	public double getPrix() {
+		return prix;
+	}
+
+	public void setPrix(double prix) {
+		this.prix = prix;
+	}
+
+	
+	
+}
