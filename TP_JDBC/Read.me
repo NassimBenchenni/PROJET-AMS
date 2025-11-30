@@ -1,0 +1,138 @@
+# TP JDBC - Gestion de Produits    # Binôme Nassim Benchenni, Nicolas Di Grande
+
+## Description
+Application Java de gestion de produits en base de données PostgreSQL avec interface interactive en ligne de commande.
+
+## Prérequis
+- PostgreSQL JDBC Driver (postgresql-XX.jar) (sinon il y aura erreur dans Connexion.java)
+- Accès à la base de données ETD de l'université (avec vos mdp et id)
+
+## Configuration
+
+### 1. Modifier vos identifiants
+Dans le fichier `Connexion.java`, remplacez les identifiants par les vôtres :
+```java
+props.setProperty("user", "votreIdentifiant");    // Remplacer par votre login
+props.setProperty("password", "votreMotDePasse"); // Remplacer par votre mdp
+```
+
+### 2. Ajouter le driver PostgreSQL
+1. Clic droit sur le projet → Properties
+2. Build Path → Libraries
+3. Add External JARs → Sélectionner `postgresql-XX.jar`
+4. Order and Export → Cocher le JAR
+5. Apply and Close
+
+## Structure du projet
+```
+tpjdbc/
+├── Connexion.java    - Connexion à la base de données
+├── Produit.java      - Classe représentant un produit
+├── Gestion.java      - Gestion des opérations SQL
+├── Main.java         - Tests automatiques
+└── Test.java         - Interface interactive
+
+data/
+├── IData.java        - Interface pour les objets persistants
+└── fieldType.java    - Enum des types de données
+```
+
+## Utilisation
+
+### Option 1 : Tests automatiques (Main.java)
+
+Run `Main.java` pour exécuter tous les tests :
+
+**Ce que fait Main.java :**
+1. Crée la table `product`
+2. Affiche la structure de la table
+3. Insère 2 produits
+4. Teste la mise à jour (même id → somme des prix + concaténation descriptions)
+5. Supprime un produit
+6. Supprime la table
+
+**Résultat attendu (de Main.java):**
+```
+Connexion Réussi
+
+=== TEST 1 : Création de la table ===
+Table créée avec succès
+
+=== TEST 2 : Structure de la table ===
+id : INT4
+lot : INT4
+nom : VARCHAR
+description : VARCHAR
+categorie : VARCHAR
+prix : FLOAT8
+
+=== TEST 3 : Insertion d'un produit ===
+Insertion réussie
+id	lot	nom	description	categorie	prix	
+1	100	Laptop	Ordinateur portable	Electronique	899.99	
+
+=== TEST 4 : Insertion d'un autre produit ===
+Insertion réussie
+id	lot	nom	description	categorie	prix	
+1	100	Laptop	Ordinateur portable	Electronique	899.99	
+2	200	Souris	Sans fil	Accessoire	29.99	
+
+=== TEST 5 : Mise à jour (même id) ===
+Mise à jour réussie
+id	lot	nom	description	categorie	prix	
+2	200	Souris	Sans fil	Accessoire	29.99	
+1	100	Laptop	Ordinateur portable Reconditionné	Electronique	999.99	
+
+=== TEST 6 : Suppression d'un produit ===
+Produit supprimé
+id	lot	nom	description	categorie	prix	
+1	100	Laptop	Ordinateur portable Reconditionné	Electronique	999.99	
+
+=== TEST 7 : Suppression de la table ===
+Table supprimée avec succès
+
+Tous les tests fonctionnent bien. 
+
+```
+
+### Option 2 : Interface interactive (Test.java)
+
+Il faut `Test.java` pour utiliser l'application en mode interactif :
+
+**Commandes disponibles :**
+
+- `CREATE` - Crée la table product
+- `INSERT` - Ajoute un produit (demande id, lot, nom, description, catégorie, prix) 
+ ET précision faites la commande INSERT puis mettez les valeurs 1 par 1
+- `DISPLAY` - Affiche tous les produits
+- `STRUCT` - Affiche la structure de la table
+- `REMOVE <id>` - Supprime le produit avec cet id
+- `DROP` - Supprime la table
+- `EXIT` - Quitte l'application
+
+**Exemple d'utilisation :**
+```
+> CREATE
+Table product créée
+
+> INSERT
+ID: 1
+Lot: 100
+Nom: Laptop
+Description: Ordinateur portable
+Catégorie: Electronique
+Prix: 899.99
+Insertion réussie
+
+> DISPLAY
+id	lot	nom	description	categorie	prix
+1	100	Laptop	Ordinateur portable	Electronique	899.99
+
+> EXIT
+```
+
+## Remarques importantes
+
+**Avant chaque test** : Si vous relancez Main.java plusieurs fois, pensez à supprimer la table d'abord ou utilisez `DROP TABLE IF EXISTS product`,
+ Et ne pas SPAM l'exéctution du Main.java car ca peut faire des erreurs de connexion .
+
